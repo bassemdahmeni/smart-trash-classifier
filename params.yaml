@@ -1,1 +1,10 @@
-artifacts_root: artifacts
+# Model Configuration
+AUGMENTATION: True
+IMAGE_SIZE: [224, 224, 3]  # EfficientNet-B0 standard input size
+MODEL_NAME: efficientnet_b0
+BATCH_SIZE: 32
+INCLUDE_TOP: False
+EPOCHS: 15
+CLASSES: 6
+WEIGHTS: EfficientNet_B0_Weights.IMAGENET1K_V1
+LEARNING_RATE: 0.001
