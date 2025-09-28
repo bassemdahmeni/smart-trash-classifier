@@ -28,3 +28,15 @@ class PrepareCallbacksConfig:
     root_dir: Path
     tensorboard_root_log_dir: Path
     checkpoint_model_filepath: Path
+
+
+@dataclass(frozen=True)
+class DataPreprocessingConfig:
+    data_dir: Path
+    batch_size: int
+    image_size: list
+    val_split: float
+    test_split: float
+    shuffle: bool
+    random_seed: int
+    augmentation: bool

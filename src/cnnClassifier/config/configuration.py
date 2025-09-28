@@ -4,6 +4,7 @@ from cnnClassifier.entity.config_entity import DataIngestionConfig
 from cnnClassifier.entity.config_entity import PrepareBaseModelConfig
 from cnnClassifier.entity.config_entity import PrepareCallbacksConfig
 import os
+from cnnClassifier.entity.config_entity import DataPreprocessingConfig
 class ConfigurationManager:
     def __init__(
         self,
@@ -66,3 +67,17 @@ class ConfigurationManager:
         )
 
         return prepare_callback_config
+    
+    def get_data_preprocessing_config(self) -> DataPreprocessingConfig:
+        config_root_data = self.config.data_ingestion
+        config = DataPreprocessingConfig(
+            data_dir=Path(config_root_data.unzip_dir,"dataset-resized"),
+            batch_size=self.params.BATCH_SIZE,
+            image_size=self.params.IMAGE_SIZE,
+            val_split=self.params.VAL_SPLIT,
+            test_split=self.params.TEST_SPLIT,
+            shuffle=self.params.SHUFFLE_DATASET,
+            random_seed=self.params.RANDOM_SEED,
+            augmentation=self.params.AUGMENTATION
+        )
+        return config

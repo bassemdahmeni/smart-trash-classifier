@@ -4,7 +4,17 @@ IMAGE_SIZE: [224, 224, 3]  # EfficientNet-B0 standard input size
 MODEL_NAME: efficientnet_b0
 BATCH_SIZE: 32
 INCLUDE_TOP: False
-EPOCHS: 15
+EPOCHS: 5
 CLASSES: 6
 WEIGHTS: EfficientNet_B0_Weights.IMAGENET1K_V1
 LEARNING_RATE: 0.001
+
+
+
+
+# Data Preprocessing Parameters
+DATA_DIR: data/TrashNet   # path to your dataset
+VAL_SPLIT: 0.2            # 20% validation
+TEST_SPLIT: 0.1           # 10% test
+SHUFFLE_DATASET: True
+RANDOM_SEED: 42
