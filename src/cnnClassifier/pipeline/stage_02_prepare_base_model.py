@@ -22,7 +22,8 @@ class PrepareBaseModelTrainingPipeline:
         updated_model = prepare_base_model.update_base_model(
             num_layers_to_unfreeze=30  # you can adjust this number
         )
-
+        model_architecture = prepare_base_model.get_base_model()
+        return updated_model, model_architecture
 
 if __name__ == "__main__":
     try:
