@@ -5,6 +5,7 @@ from cnnClassifier.entity.config_entity import PrepareBaseModelConfig
 from cnnClassifier.entity.config_entity import PrepareCallbacksConfig
 import os
 from cnnClassifier.entity.config_entity import DataPreprocessingConfig
+from cnnClassifier.entity.config_entity import TrainingConfig
 class ConfigurationManager:
     def __init__(
         self,
@@ -81,3 +82,18 @@ class ConfigurationManager:
             augmentation=self.params.AUGMENTATION
         )
         return config
+    
+    def get_training_config(self) -> TrainingConfig:
+        training_cfg = self.config.training
+        pretrained_model_path = self.config.prepare_base_model.updated_base_model_path
+        create_directories([training_cfg.root_dir])
+        return TrainingConfig(
+            root_dir=training_cfg.root_dir,
+            trained_model_path=training_cfg.trained_model_path,
+            pretrained_model_path=pretrained_model_path,
+            learning_rate=0.0001,          # you can push this to yaml later
+            weight_decay=1e-4,
+            num_epochs=5,
+            patience=5,
+            num_layers_to_unfreeze=30
+        )

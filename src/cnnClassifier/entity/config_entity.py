@@ -40,3 +40,14 @@ class DataPreprocessingConfig:
     shuffle: bool
     random_seed: int
     augmentation: bool
+
+@dataclass(frozen=True)
+class TrainingConfig:
+    root_dir: str
+    trained_model_path: str
+    learning_rate: float
+    weight_decay: float
+    num_epochs: int
+    patience: int
+    num_layers_to_unfreeze: int
+    pretrained_model_path: str
