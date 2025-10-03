@@ -23,13 +23,7 @@ class ModelTrainingPipeline:
             training_config = config.get_training_config()
             prepare_callbacks_config = config.get_prepare_callback_config()
             prepare_callbacks = PrepareCallback(config=prepare_callbacks_config)
-            # prepare_pipeline = PrepareBaseModelTrainingPipeline()
-            # updated_model, model_architecture = prepare_pipeline.main()
-            # print(f"🚚 Model architecture ready: {model_architecture}")
-            # 2. Get data from preprocessing stage
-            # data_pipeline = DataPreprocessingTrainingPipeline()
-            # train_loader, val_loader, test_loader = data_pipeline.main()
-            # print(f"🚚 Data loaders ready: Train({len(train_loader.dataset)}), Val({len(val_loader.dataset)}), Test({len(test_loader.dataset)})")
+            
             
             # 3. Initialize Training component
             trainer = TrainModel(

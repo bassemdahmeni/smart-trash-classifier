@@ -6,6 +6,7 @@ from cnnClassifier.entity.config_entity import PrepareCallbacksConfig
 import os
 from cnnClassifier.entity.config_entity import DataPreprocessingConfig
 from cnnClassifier.entity.config_entity import TrainingConfig
+from cnnClassifier.entity.config_entity import EvaluationConfig
 class ConfigurationManager:
     def __init__(
         self,
@@ -97,3 +98,13 @@ class ConfigurationManager:
             patience=5,
             num_layers_to_unfreeze=30
         )
+    
+    def get_validation_config(self) -> EvaluationConfig:
+        eval_config = EvaluationConfig(
+            path_of_model="artifacts/training/model.pth",
+            training_data="artifacts/data_ingestion/dataset-resized",
+            all_params=self.params,
+            params_image_size=self.params.IMAGE_SIZE,
+            params_batch_size=self.params.BATCH_SIZE
+        )
+        return eval_config
