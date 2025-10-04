@@ -14,6 +14,7 @@ class DataIngestionConfig:
 class PrepareBaseModelConfig:
     root_dir: Path
     base_model_path: Path
+    base_model_arch_path: Path
     updated_base_model_path: Path
     params_image_size: list
     params_learning_rate: float
@@ -45,6 +46,7 @@ class DataPreprocessingConfig:
 class TrainingConfig:
     root_dir: str
     trained_model_path: str
+    model_architecture_path: str
     learning_rate: float
     weight_decay: float
     num_epochs: int
@@ -57,6 +59,7 @@ class TrainingConfig:
 class EvaluationConfig:
     path_of_model: Path
     training_data: Path
+    model_architecture_path: str
     all_params: dict
     params_image_size: list
     params_batch_size: int

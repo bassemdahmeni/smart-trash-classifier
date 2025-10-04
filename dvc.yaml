@@ -27,7 +27,7 @@ stages:
     deps:
       - src/cnnClassifier/pipeline/stage_03_data_preprocessing.py
       - config/config.yaml
-      - artifacts\data_ingestion\dataset-resized
+      # - artifacts\data_ingestion\dataset-resized
     params:
       - DATA_DIR
       - VAL_SPLIT
@@ -47,7 +47,7 @@ stages:
       - src/cnnClassifier/components/prepare_callbacks.py
       - config/config.yaml
       
-      - artifacts/prepare_base_model
+      
       
     params:
       - IMAGE_SIZE

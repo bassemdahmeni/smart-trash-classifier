@@ -47,10 +47,16 @@ class PrepareBaseModel:
         torch.save(model.state_dict(), path)
         print(f"[Saved] Model saved at: {path}")
 
+    def save_model_arch(self, model: nn.Module, path: Path):
+        """Save model weights"""
+        torch.save(model, path)
+        print(f"[Saved] Model saved at: {path}")
+
     def prepare(self):
         """Prepare and save the base model"""
         print("[Pipeline] Preparing base model...")
         model = self.get_base_model()
+        self.save_model_arch(model, self.config.base_model_arch_path)
         self.save_model(model, self.config.base_model_path)
         print("[Pipeline Done] Base model prepared and saved.")
         return model

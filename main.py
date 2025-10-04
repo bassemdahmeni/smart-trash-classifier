@@ -26,7 +26,7 @@ STAGE_NAME = "Prepare Base Model stage"
 try:
         logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
         obj = PrepareBaseModelTrainingPipeline()
-        updated_model, model_architecture=obj.main()
+        obj.main()
         
         logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
 except Exception as e:
@@ -50,7 +50,7 @@ STAGE_NAME = "Training"
 try:
         logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
         obj = ModelTrainingPipeline()
-        obj.main(model_architecture=model_architecture, train_loader=train_loader, val_loader=val_loader)
+        obj.main( train_loader=train_loader, val_loader=val_loader)
         logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
 except Exception as e:
         logger.exception(e)
@@ -63,7 +63,7 @@ STAGE_NAME = "Evaluation"
 try:
         logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
         obj = ModelEvaluationPipeline()
-        obj.main(model_architecture=model_architecture, test_loader=test_loader)
+        obj.main( test_loader=test_loader)
         logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
 
 except Exception as e:

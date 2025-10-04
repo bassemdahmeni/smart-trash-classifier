@@ -43,6 +43,7 @@ class ConfigurationManager:
         prepare_base_model_config = PrepareBaseModelConfig(
             root_dir=Path(config.root_dir),
             base_model_path=Path(config.base_model_path),
+            base_model_arch_path=Path(config.base_model_arch_path),
             updated_base_model_path=Path(config.updated_base_model_path),
             model_name=self.params.MODEL_NAME,
             params_image_size=self.params.IMAGE_SIZE,
@@ -87,11 +88,13 @@ class ConfigurationManager:
     def get_training_config(self) -> TrainingConfig:
         training_cfg = self.config.training
         pretrained_model_path = self.config.prepare_base_model.updated_base_model_path
+        model_architecture_path = self.config.prepare_base_model.base_model_arch_path
         create_directories([training_cfg.root_dir])
         return TrainingConfig(
             root_dir=training_cfg.root_dir,
             trained_model_path=training_cfg.trained_model_path,
             pretrained_model_path=pretrained_model_path,
+            model_architecture_path=model_architecture_path,
             learning_rate=0.0001,          # you can push this to yaml later
             weight_decay=1e-4,
             num_epochs=5,
@@ -100,9 +103,11 @@ class ConfigurationManager:
         )
     
     def get_validation_config(self) -> EvaluationConfig:
+        model_architecture_path = self.config.prepare_base_model.base_model_arch_path
         eval_config = EvaluationConfig(
             path_of_model="artifacts/training/model.pth",
             training_data="artifacts/data_ingestion/dataset-resized",
+            model_architecture_path=model_architecture_path,
             all_params=self.params,
             params_image_size=self.params.IMAGE_SIZE,
             params_batch_size=self.params.BATCH_SIZE

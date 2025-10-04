@@ -29,8 +29,9 @@ if __name__ == "__main__":
     try:
         logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
         obj = PrepareBaseModelTrainingPipeline()
-        obj.main()
+        updated_model, model_architecture=obj.main()
         logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
+        print(model_architecture)
     except Exception as e:
         logger.exception(e)
         raise e
