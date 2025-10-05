@@ -14,7 +14,7 @@ from cnnClassifier.pipeline.stage_02_prepare_base_model import PrepareBaseModelT
 
 
 class PredictionPipeline:
-    def __init__(self, model_path: Path, class_names=None, device=None):
+    def __init__(self, model_path="artifacts/training/model.pth", class_names=None, device=None):
         self.model_path = model_path
         self.device = device or torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.class_names = class_names or ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
@@ -70,6 +70,6 @@ class PredictionPipeline:
 
 
 if __name__ == "__main__":
-    predictor = PredictionPipeline(model_path="artifacts/training/model.pth")
-    result = predictor.predict("artifacts\data_ingestion\dataset-resized\glass\glass9.jpg")
+    predictor = PredictionPipeline()
+    result = predictor.predict("artifacts\data_ingestion\dataset-resized\glass\glass19.jpg")
     print(result)

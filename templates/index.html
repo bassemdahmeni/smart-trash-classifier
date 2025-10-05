@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoSort - Smart Trash Classification</title>
+    <style>
+        :root {
+            --primary: #2ecc71;
+            --primary-dark: #27ae60;
+            --secondary: #3498db;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --glass: #9b59b6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            font-size: 2rem;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+            background: white;
+            margin-bottom: 2rem;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: #7f8c8d;
+        }
+        
+        .upload-container {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .upload-area {
+            border: 2px dashed #bdc3c7;
+            border-radius: 8px;
+            padding: 3rem 2rem;
+            margin: 1.5rem 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(46, 204, 113, 0.05);
+        }
+        
+        .upload-area.active {
+            border-color: var(--primary);
+            background: rgba(46, 204, 113, 0.1);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: #bdc3c7;
+            margin-bottom: 1rem;
+        }
+        
+        .upload-area.active .upload-icon {
+            color: var(--primary);
+        }
+        
+        .upload-text {
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn:disabled:hover {
+            background: #bdc3c7;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            margin: 1rem auto;
+            display: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-container {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            display: none;
+        }
+        
+        .result-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .result-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+        
+        .result-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .result-image {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .result-image img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-details {
+            flex: 2;
+            min-width: 300px;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: capitalize;
+        }
+        
+        .cardboard {
+            background: rgba(155, 89, 182, 0.2);
+            color: #8e44ad;
+        }
+        
+        .glass {
+            background: rgba(52, 152, 219, 0.2);
+            color: #2980b9;
+        }
+        
+        .metal {
+            background: rgba(149, 165, 166, 0.2);
+            color: #7f8c8d;
+        }
+        
+        .paper {
+            background: rgba(241, 196, 15, 0.2);
+            color: #f39c12;
+        }
+        
+        .plastic {
+            background: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+        }
+        
+        .trash {
+            background: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+        }
+        
+        .confidence-meter {
+            margin: 1.5rem 0;
+        }
+        
+        .confidence-bar {
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        .probabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .probability-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #bdc3c7;
+        }
+        
+        .probability-item.highlight {
+            background: rgba(46, 204, 113, 0.1);
+            border-left-color: var(--primary);
+        }
+        
+        .probability-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .probability-label {
+            text-transform: capitalize;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .disposal-guide {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+        
+        .disposal-guide h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-section p {
+            margin-bottom: 1rem;
+            color: #bdc3c7;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: var(--primary);
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bdc3c7;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .spinner {
+            border: 5px solid rgba(46, 204, 113, 0.2);
+            border-radius: 50%;
+            border-top: 5px solid var(--primary);
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .result-content {
+                flex-direction: column;
+            }
+            
+            .probabilities-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">♻️</div>
+                    <h1>EcoSort</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#classify">Classify</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="/train" class="btn btn-outline">Train Model</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <h2>Smart Trash Classification</h2>
+            <p>Upload an image of trash and let our AI model classify it into the appropriate category for proper disposal and recycling.</p>
+            <a href="#classify" class="btn">Get Started</a>
+        </div>
+    </section>
+
+    <section class="container" id="classify">
+        <div class="upload-container">
+            <h2>Upload Trash Image</h2>
+            <p>Help the environment by properly classifying your waste</p>
+            
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📁</div>
+                <p class="upload-text">Drag & drop your image here or click to browse</p>
+                <p class="upload-subtext">Supported formats: JPG, JPEG, PNG</p>
+            </div>
+            
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            
+            <img id="imagePreview" class="image-preview" alt="Preview">
+            
+            <button id="classifyBtn" class="btn" disabled>Classify Trash</button>
+        </div>
+        
+        <div class="loading" id="loadingIndicator">
+            <div class="spinner"></div>
+            <p>Analyzing your image...</p>
+        </div>
+        
+        <div class="result-container" id="resultContainer">
+            <div class="result-header">
+                <div class="result-icon">✅</div>
+                <h2>Classification Result</h2>
+            </div>
+            
+            <div class="result-content">
+                <div class="result-image">
+                    <img id="resultImage" src="" alt="Classified trash">
+                </div>
+                
+                <div class="result-details">
+                    <div class="category-badge" id="categoryBadge">Glass</div>
+                    <h3 id="itemName">Predicted: <span id="predictedClass">Glass</span></h3>
+                    
+                    <div class="confidence-meter">
+                        <p>Confidence: <strong id="confidenceValue">53.8%</strong></p>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="confidenceBar" style="width: 53.8%"></div>
+                        </div>
+                    </div>
+                    
+                    <h4>All Probabilities:</h4>
+                    <div class="probabilities-grid" id="probabilitiesGrid">
+                        <!-- Probabilities will be dynamically inserted here -->
+                    </div>
+                    
+                    <div class="disposal-guide">
+                        <h3>Disposal Guide</h3>
+                        <p id="disposalInstructions">Based on the classification, here are the proper disposal instructions for this item.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container" id="about">
+        <div class="upload-container">
+            <h2>About EcoSort</h2>
+            <p>EcoSort uses advanced machine learning to classify trash into categories like cardboard, glass, metal, paper, plastic, and general trash. Our goal is to promote proper waste disposal and increase recycling rates.</p>
+            
+            <div class="stats" style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem;">
+                <div class="stat-card" style="flex: 1; min-width: 200px; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center;">
+                    <div class="stat-value" style="font-size: 2rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">6</div>
+                    <div class="stat-label" style="color: #7f8c8d; font-weight: 500;">Waste Categories</div>
+                </div>
+                <div class="stat-card" style="flex: 1; min-width: 200px; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center;">
+                    <div class="stat-value" style="font-size: 2rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">AI-Powered</div>
+                    <div class="stat-label" style="color: #7f8c8d; font-weight: 500;">Classification</div>
+                </div>
+                <div class="stat-card" style="flex: 1; min-width: 200px; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center;">
+                    <div class="stat-value" style="font-size: 2rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem;">Easy</div>
+                    <div class="stat-label" style="color: #7f8c8d; font-weight: 500;">To Use</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>EcoSort</h3>
+                    <p>Making waste classification smarter for a cleaner planet.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <p><a href="#home" style="color: #bdc3c7; text-decoration: none;">Home</a></p>
+                    <p><a href="#classify" style="color: #bdc3c7; text-decoration: none;">Classify</a></p>
+                    <p><a href="#about" style="color: #bdc3c7; text-decoration: none;">About</a></p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-links">
+                        <a href="#">📘</a>
+                        <a href="#">📷</a>
+                        <a href="#">🐦</a>
+                        <a href="#">💼</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 EcoSort. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+            const imagePreview = document.getElementById('imagePreview');
+            const classifyBtn = document.getElementById('classifyBtn');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const resultContainer = document.getElementById('resultContainer');
+            const resultImage = document.getElementById('resultImage');
+            const categoryBadge = document.getElementById('categoryBadge');
+            const predictedClass = document.getElementById('predictedClass');
+            const confidenceValue = document.getElementById('confidenceValue');
+            const confidenceBar = document.getElementById('confidenceBar');
+            const probabilitiesGrid = document.getElementById('probabilitiesGrid');
+            const disposalInstructions = document.getElementById('disposalInstructions');
+            
+            // Disposal guide information
+            const disposalGuides = {
+                'cardboard': 'Cardboard should be flattened and placed in recycling bins. Make sure it is clean and dry.',
+                'glass': 'Glass containers should be rinsed and placed in glass recycling bins. Remove lids and caps.',
+                'metal': 'Metal cans and containers should be rinsed and placed in recycling bins. Aluminum foil can be recycled if clean.',
+                'paper': 'Paper should be clean and dry. Place in recycling bins. Shredded paper may have special disposal requirements.',
+                'plastic': 'Check the recycling number. Rinse containers before recycling. Some plastics may not be recyclable in your area.',
+                'trash': 'This item should be placed in the general waste bin. Consider if any parts can be separated for recycling.'
+            };
+            
+            // Upload area click event
+            uploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            // Drag and drop functionality
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                uploadArea.classList.add('active');
+            }
+            
+            function unhighlight() {
+                uploadArea.classList.remove('active');
+            }
+            
+            uploadArea.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFiles(files);
+            }
+            
+            fileInput.addEventListener('change', function() {
+                handleFiles(this.files);
+            });
+            
+            function handleFiles(files) {
+                if (files.length > 0) {
+                    const file = files[0];
+                    if (file.type.match('image.*')) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            imagePreview.src = e.target.result;
+                            imagePreview.style.display = 'block';
+                            classifyBtn.disabled = false;
+                        }
+                        
+                        reader.readAsDataURL(file);
+                    } else {
+                        alert('Please select an image file (JPG, JPEG, PNG)');
+                    }
+                }
+            }
+            
+            // Classify button event
+            classifyBtn.addEventListener('click', function() {
+                if (imagePreview.src) {
+                    // Show loading indicator
+                    loadingIndicator.style.display = 'block';
+                    resultContainer.style.display = 'none';
+                    
+                    // Convert image to base64
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = imagePreview.naturalWidth;
+                    canvas.height = imagePreview.naturalHeight;
+                    ctx.drawImage(imagePreview, 0, 0);
+                    
+                    const base64Image = canvas.toDataURL('image/jpeg').split(',')[1];
+                    
+                    // Send to Flask backend
+                    fetch('/predict', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ image: base64Image }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Hide loading indicator
+                        loadingIndicator.style.display = 'none';
+                        
+                        // Display results
+                        displayResults(data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        loadingIndicator.style.display = 'none';
+                        alert('An error occurred while classifying the image. Please try again.');
+                    });
+                }
+            });
+            
+            function displayResults(data) {
+                // Update result image
+                resultImage.src = imagePreview.src;
+                
+                // Update predicted class
+                const predictedClassValue = data.predicted_class;
+                predictedClass.textContent = predictedClassValue;
+                
+                // Update category badge
+                categoryBadge.textContent = predictedClassValue;
+                categoryBadge.className = 'category-badge ' + predictedClassValue;
+                
+                // Update confidence
+                const confidencePercent = (data.confidence * 100).toFixed(1);
+                confidenceValue.textContent = `${confidencePercent}%`;
+                confidenceBar.style.width = `${confidencePercent}%`;
+                
+                // Update probabilities grid
+                probabilitiesGrid.innerHTML = '';
+                for (const [category, probability] of Object.entries(data.all_probabilities)) {
+                    const probabilityPercent = (probability * 100).toFixed(1);
+                    const probabilityItem = document.createElement('div');
+                    probabilityItem.className = `probability-item ${category === predictedClassValue ? 'highlight' : ''}`;
+                    probabilityItem.innerHTML = `
+                        <div class="probability-value">${probabilityPercent}%</div>
+                        <div class="probability-label">${category}</div>
+                    `;
+                    probabilitiesGrid.appendChild(probabilityItem);
+                }
+                
+                // Update disposal instructions
+                disposalInstructions.textContent = disposalGuides[predictedClassValue] || 'Follow local disposal guidelines for this type of waste.';
+                
+                // Show result container
+                resultContainer.style.display = 'block';
+                
+                // Scroll to results
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>
