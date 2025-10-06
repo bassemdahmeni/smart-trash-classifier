@@ -16,4 +16,5 @@ scipy
 Flask
 Flask-Cors
 kagglehub
+tensorboard
 -e .
