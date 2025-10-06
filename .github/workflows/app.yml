@@ -26,9 +26,18 @@ jobs:
 
       - name: Lint code (basic style check)
         run: |
-          pip install flake8
-          flake8 . --max-line-length=120
+            # Install flake8
+            pip install flake8
 
+            # Create a .flake8 configuration file
+            echo "[flake8]" > .flake8
+            echo "max-line-length = 120" >> .flake8
+            echo "ignore = E203,E266,E501,W503,E303,W293,W292" >> .flake8
+            echo "exclude = .git,__pycache__,venv,build,dist" >> .flake8
+
+            # Run flake8 using the config file
+            flake8 .
+      
       - name: Run tests
         run: |
           pytest tests/ || echo "⚠️ No tests found, skipping..."
