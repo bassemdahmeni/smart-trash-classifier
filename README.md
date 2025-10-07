@@ -56,19 +56,24 @@ conda activate trash-classification
 # Install dependencies
 pip install -r requirements.txt
 
+
+
 # Setup DVC (if using remote storage)
 dvc pull
-🐳 Using Docker
-bash
+```
+
+## 🐳 Using Docker
+```bash
 Copier le code
 # Build the image
 docker build -t trash-classification-app .
 
 # Run the container
 docker run -p 8080:8080 trash-classification-app
-📖 Usage
+```
+## 📖 Usage
 🧠 Training the Model
-bash
+```bash
 Copier le code
 # Run the complete training pipeline
 python main.py
@@ -77,10 +82,11 @@ Or via API:
 bash
 Copier le code
 curl -X POST http://localhost:8080/train
-🧩 Making Predictions
+```
+## 🧩 Making Predictions
 Via API:
 
-bash
+```bash
 Copier le code
 curl -X POST http://localhost:8080/predict \
   -H "Content-Type: application/json" \
@@ -94,54 +100,52 @@ from cnnClassifier.pipeline.predict import PredictionPipeline
 predictor = PredictionPipeline()
 result = predictor.predict("path/to/your/image.jpg")
 print(result)
-🌐 API Endpoints
+```
+
+## 🌐 API Endpoints
 Method	Endpoint	Description
 GET	/	Home page with web interface
 POST	/train	Trigger model training pipeline
 POST	/predict	Classify waste image (expects base64)
 
-🏭 MLOps Infrastructure
-📦 Data Version Control (DVC)
+## 🏭 MLOps Infrastructure
+### 📦 Data Version Control (DVC)
 Tracks datasets and model artifacts
 
 Ensures reproducible pipelines
 
 Supports remote storage integration
 
-⚙️ CI/CD with GitHub Actions
+### ⚙️ CI/CD with GitHub Actions
 Automated testing on push/pull requests
 
 Docker image building and publishing
 
 Deployment automation
 
-🐳 Containerization
+### 🐳 Containerization
 Fully Dockerized for consistent environments
 
 Conda environment management
 
 Easily deployable to cloud platforms
 
-🎯 Model Performance
-Metric	Value
-Accuracy	[Add your metric here]
-Inference Speed	[Add timing info]
-Categories Supported	Cardboard, Glass, Metal, Paper, Plastic, Trash
 
-🌐 Deployment
+### 🌐 Deployment
 💻 Local Deployment
-bash
+```bash
 Copier le code
 python app.py
 # Access at http://localhost:8080
-☁️ Cloud Deployment
+```
+### ☁️ Cloud Deployment
 AWS: Use port 8080
 
 Azure: Use port 80
 
 Other: Adjust ports in app.py as needed
 
-🔧 Configuration
+## 🔧 Configuration
 Key configuration parameters are defined in config_entity.py:
 
 Model architecture (EfficientNet B0/B1)
@@ -154,7 +158,7 @@ Training hyperparameters
 
 Path configurations
 
-🤝 Contributing
+## 🤝 Contributing
 Fork the repository
 
 Create a new feature branch
@@ -165,7 +169,7 @@ Push to your branch
 
 Create a Pull Request 🚀
 
-🆘 Support
+## 🆘 Support
 If you encounter any issues:
 
 Check existing GitHub issues
